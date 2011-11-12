@@ -28,19 +28,19 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
       
 	   $translate = new Zend_Translate(
-    array(
-        'adapter' => 'Csv',
-        'content' => APPLICATION_PATH . '/languages/pt_PT/pt_PT.csv',
-        'locale'  => 'pt_PT'
-    )
-);
-$translate->addTranslation(
-    array(
-        'content' => APPLICATION_PATH . '/languages/en_GB/en_GB.csv',
-        'locale' => 'en_US'
-    )
-);
-      
+								    	array(
+								        'adapter' => 'Csv',
+								        'content' => APPLICATION_PATH . '/languages/pt_PT/pt_PT.csv',
+								        'locale'  => 'pt_PT'
+								    	)
+									);
+		$translate->addTranslation(
+		    array(
+		        'content' => APPLICATION_PATH . '/languages/en_GB/en_GB.csv',
+		        'locale' => 'en_US'
+		    )
+		);
+	      
         
         $translate->getAdapter()->setLocale(Zend_Locale::findLocale());
         $registry = Zend_Registry::getInstance();
@@ -50,7 +50,7 @@ $translate->addTranslation(
       }
 
 
-	protected function _initHeader ()
+		protected function _initHeader ()
         {
             $this->bootstrap('layout');
             $layout = $this->getResource('layout');
@@ -69,10 +69,19 @@ $translate->addTranslation(
             $view->headMeta()->appendName('BuildDate', '@@BuildDate@@');
             
 
-
-
-
         }
+		
+		protected function _initRoutes ()
+	    {
+	
+	        $router = Zend_Controller_Front::getInstance()->getRouter();
+	
+	        $route = new Zend_Controller_Router_Route('/projects/:filename', array(
+	            'module' => 'default',
+	            'controller' => 'projects' ,
+	            'action' => 'index'));
+	        $router->addRoute('default_projects_index', $route);
+		}
 
 }
 
