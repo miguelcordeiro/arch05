@@ -1,0 +1,94 @@
+body {
+	margin: 0px;
+	color: #666;
+	font: 11px "Courier New", Courier, mono;
+}
+#header {
+	height: 120px;
+	padding-top: 50px;
+	background: url(/images/comuns/ARQT05.jpg) no-repeat 12px 68px;
+}
+
+#header p {
+	margin-left: 300px;
+	margin-top: 60px;
+}
+.peopletxt li{
+	list-style-type: none;
+}
+.peopletxt li.bold{
+	font-weight: bold;
+}
+a:link {
+	text-decoration: none;
+	color: #666666;
+}
+a:visited {
+	text-decoration: none;
+	color: #666666;
+}
+
+a:hover {
+	text-decoration: none;
+	color: #CCCCCC;
+	background-color: #333333;
+}
+
+a:active {
+	text-decoration: none;
+}
+
+.dash {
+	border-bottom: 1px dashed gray;
+	height: 30px;
+	margin-left: 40px;
+	margin-bottom: 20px;
+	width: 122%;
+}
+
+.peopletxt table {
+	margin-left: 40px;
+}
+
+.box-text {
+	width: 380px;
+	padding-left: 20px;
+	padding-right: 20px;
+	float: left;
+}
+.box-image {
+	float: left;
+}
+
+.dash-int {
+	border-bottom: 1px dashed gray;
+	height: 5px;
+	width: 100%;
+	margin-left: 15px;
+	margin-bottom: 15px;
+}
+.bold {
+	font-weight: bold;
+}
+
+.table-home th{
+	text-align: left;
+}
+.table-home tfoot{
+	text-align: center;
+}
+.table-home td {
+	padding-right: 10px;
+	padding-left: 10px;
+}
+
+.front-images-links img {
+	border-style: none;
+	border-width: 0;
+}
+
+.front-images-links a:hover {
+	text-decoration: none;
+	background-color: white;
+	
+}

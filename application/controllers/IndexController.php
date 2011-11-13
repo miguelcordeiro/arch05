@@ -10,7 +10,8 @@ class IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        // action body
+        $page = $this->getRequest()->getParam('filename');
+        $this->render($page);
     }
 
 

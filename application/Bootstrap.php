@@ -58,7 +58,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $view->translate = Zend_Registry::get('Zend_Translate');
             $view->doctype("XHTML1_STRICT");
             $view->headTitle('AR-CH-05');
-            
+            $view->headLink()->headLink(array('rel' => 'favicon', 'href' => '/images/comuns/favicon.ico'), 'PREPEND');
+            $view->headLink()->headLink(array('rel' => 'icon', 'href' => '/images/comuns/favicon.ico'), 'PREPEND');
             $view->headMeta()->appendHttpEquiv('Content-Language', str_replace("_", '-', Zend_Locale::findLocale()));
             $view->headMeta()->appendHttpEquiv('X-UA-Compatible', 'chrome=1');
             $view->headMeta()->appendName('Developer', 'Ricardo Simao');
@@ -67,7 +68,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $view->headMeta()->appendName('Zend Framework', Zend_Version::VERSION);
             $view->headMeta()->appendName('Version', '@@BuildNumber@@');
             $view->headMeta()->appendName('BuildDate', '@@BuildDate@@');
-            
+            $view->headLink()->appendStylesheet('/css/styles.css');
 
         }
 		
@@ -81,6 +82,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	            'controller' => 'projects' ,
 	            'action' => 'index'));
 	        $router->addRoute('default_projects_index', $route);
+			
+			$route = new Zend_Controller_Router_Route('/:filename', array(
+	            'module' => 'default',
+	            'controller' => 'index' ,
+	            'action' => 'index'));
+	        $router->addRoute('default_index_index', $route);
 		}
 
 }
