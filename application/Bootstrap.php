@@ -27,8 +27,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $registry->set('Zend_Locale', $locale);
 
       
-	   $translate = new Zend_Translate(
-								    	array(
+	   $translate = new Zend_Translate( array(
 								        'adapter' => 'Csv',
 								        'content' => APPLICATION_PATH . '/languages/pt_PT/pt_PT.csv',
 								        'locale'  => 'pt_PT'
