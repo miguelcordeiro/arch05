@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Arch05"  default="main" basedir=".">
+
+	<!-- Set date -->
+	<tstamp>
+		<format property="DATE" pattern="%c" locale="pt_PT" />
+	</tstamp>
+	
+	<property file="main.properties"/>
+	
+	
+	<!-- START -->
+	<target name="set.version" description="set the version of the APP">
+		<propertyprompt propertyName="VERSION" promptText="Enter version type [Major,Minor,Feature,Bugfix,Test]:" />
+		<version releasetype="${VERSION}" file="version.txt" property="version.number"/>
+	</target>
+	
+	
+	<target name="prepare" depends="set.version">
+		
+		
+		<echo>---------------------------------</echo>
+		<echo>|     Removing old files...     |</echo>
+		<echo>---------------------------------</echo>
+		<delete dir="${DEPLOY_DIR}" includeemptydirs="true" verbose="true" failonerror="true" />
+		
+		<echo>----------------------------------</echo>
+		<echo>|        Create new dir...       |</echo>
+		<echo>----------------------------------</echo>
+		<mkdir dir="${DEPLOY_DIR}" />
+	</target>
+
+	<target name="copy" depends="prepare">
+		<echo>------------------------------------------------------------------------------------</echo>
+		<echo>|  Copying files to the ${DEPLOY_DIR} directory... |</echo>
+		<echo>------------------------------------------------------------------------------------</echo>
+		<copy todir="${DEPLOY_DIR}">
+			<fileset dir="${REPO_DIR}">
+				<include name="**" />
+				<include name="cache/" />
+				<exclude name="build/" />
+				<exclude name="library/" />
+				<exclude name="lib/" />
+				<exclude name="docs/" />
+				<exclude name="tests/" />
+				<exclude name="sample/" />
+				<exclude name=".git/" />
+				<exclude name=".gitignore" />
+				<exclude name=".zfproject.xml" />
+				<exclude name=".DS_Store" />
+				<exclude name=".buildpath" />
+				<exclude name=".project" />
+				<exclude name=".settings/" />
+				<exclude name=".svn/" />
+			</fileset>
+			<filterchain>
+				<replacetokens begintoken="@@" endtoken="@@">
+					<token key="BuildNumber" value="${version.number}" />
+					<token key="BuildDate" value="${DSTAMP} - ${TSTAMP}" />
+					</replacetokens>
+			</filterchain>
+		</copy>
+	</target>
+	
+	
+	<target name="minified.js" depends="copy">
+		 <echo>--------------------------------</echo>
+		 <echo>|     Minify JS to release     |</echo>
+		 <echo>--------------------------------</echo>
+		<jsMin targetDir="${DEPLOY_DIR}/public/js" failOnError="false">
+			<fileset dir="${DEPLOY_DIR}/public/js">
+				<include name="**/*.js"/>
+			</fileset>
+		</jsMin>
+	</target>
+	
+	<taskdef name="minify" classname="tasks.ext.kpMinTask" />
+	<target name="minify-css" depends="minified.js">
+	    <echo>--------------------------------</echo>
+	    <echo>|     Minify CSS to release    |</echo>
+	    <echo>--------------------------------</echo>
+	    <minify targetDir="${DEPLOY_DIR}/public/css"
+	              yuiPath="tools/yuicompressor.jar">
+	        <fileset dir="${DEPLOY_DIR}/public/css">
+	          <include name="*.css"/>
+	        </fileset>
+	    </minify>
+	</target>
+	
+	<taskdef name="minifyhtml" classname="tasks.ext.RpsHtmlMinTask" />
+	<target name="minify-html" depends="minify-css">
+	    <echo>--------------------------------</echo>
+	    <echo>|     Minify HTML to release    |</echo>
+	    <echo>--------------------------------</echo>
+	    <minify targetDir="${DEPLOY_DIR}"
+	              yuiPath="tools/htmlcompressor.jar">
+	        <fileset dir="${DEPLOY_DIR}">
+	          <include name="**/*.phtml"/>
+	        </fileset>
+	    </minify>
+	</target>
+
+
+	<target name="set.prod.env" depends="minify-html">
+		<echo>-------------------------------------</echo>
+	    <echo>|     Deleting .htaccess file...    |</echo>
+	    <echo>-------------------------------------</echo>
+		<delete file="${DEPLOY_DIR}/public/.htaccess" />
+		<echo>----------------------------------------------</echo>
+	    <echo>|     Create Production .htaccess file...    |</echo>
+	    <echo>----------------------------------------------</echo>
+		<copy file="${BUILD_FILE_DIRECTORY}/${HTACCESS_FILE}" tofile="${DEPLOY_DIR}/public/.htaccess" />
+	</target>
+	
+
+		<target name="main" depends="set.version,prepare,copy,minified.js,minify-css,minify-html,set.prod.env" >
+			<echo>=======================================</echo>
+			<echo>=======================================</echo>
+		    <echo>            !!BUILD FINISH!!           </echo>
+		    <echo>=======================================</echo>
+		    <echo>=======================================</echo>
+		</target>	
+</project>
